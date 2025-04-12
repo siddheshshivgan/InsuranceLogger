@@ -1,0 +1,293 @@
+/* src/styles.css */
+:root {
+    --primary-color: #0047AB;
+    --primary-light: #E6F0FF;
+    --accent-color: #0057D9;
+    --text-color: #333333;
+    --light-gray: #F5F7FA;
+    --medium-gray: #E2E8F0;
+    --dark-gray: #718096;
+    --success-color: #38A169;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  /* Layout */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .app-header {
+    background-color: white;
+    padding: 15px 30px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .content-container {
+    flex: 1;
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .app-footer {
+    background-color: white;
+    padding: 15px;
+    text-align: center;
+    color: var(--dark-gray);
+    font-size: 14px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Logo */
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .company-logo {
+    height: 40px;
+    max-width: 180px;
+    object-fit: contain;
+  }
+  
+  /* Card */
+  .card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 20px;
+    transition: var(--transition);
+  }
+  
+  /* Typography */
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: 600;
+  }
+  
+  h2 {
+    color: var(--dark-gray);
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  h3 {
+    color: var(--text-color);
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  /* Pills */
+  .pill-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0 30px;
+  }
+  
+  .pill-button {
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  
+  .pill-button.active {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 71, 171, 0.3);
+  }
+  
+  .pill-button:not(.active) {
+    background-color: var(--medium-gray);
+    color: var(--text-color);
+  }
+  
+  .pill-button:hover:not(.active) {
+    background-color: #D1D9E6;
+    transform: translateY(-1px);
+  }
+  
+  /* Form */
+  .form-container {
+    background-color: var(--primary-light);
+    padding: 25px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .insurance-form {
+    display: grid;
+    gap: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 5px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--dark-gray);
+    font-size: 15px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: var(--transition);
+    background-color: white;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.1);
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .save-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  
+  .save-button:hover:not(:disabled) {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 71, 171, 0.2);
+  }
+  
+  .save-button:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  .save-button:disabled {
+    background-color: var(--medium-gray);
+    color: var(--dark-gray);
+    cursor: not-allowed;
+  }
+  
+  /* Success Message */
+  .success-message {
+    text-align: center;
+    padding: 30px 20px;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #E6F7EF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 12px rgba(56, 161, 105, 0.15);
+  }
+  
+  .success-icon svg {
+    color: var(--success-color);
+    width: 40px;
+    height: 40px;
+  }
+  
+  .success-title {
+    margin-top: 15px;
+    color: var(--success-color);
+    font-size: 24px;
+  }
+  
+  .success-subtitle {
+    margin-top: 15px;
+    color: var(--dark-gray);
+    font-size: 18px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 20px 15px;
+    }
+    
+    .card {
+      padding: 20px;
+    }
+    
+    h1 {
+      font-size: 28px;
+    }
+    
+    .pill-container {
+      gap: 8px;
+    }
+    
+    .pill-button {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  }
+
+  .error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
