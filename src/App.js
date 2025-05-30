@@ -16,7 +16,7 @@ function App() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    company: companyOptions.MEDICLAIM[0], // Default to first option in MEDICLAIM list
+    company: '', // Default to first option in MEDICLAIM list
     dueDate: '',
     lastPremium: ''
   });
