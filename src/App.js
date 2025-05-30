@@ -82,6 +82,19 @@ function App() {
     }));
   };
 
+  function formatDisplayDate(dateStr) {
+    if (!dateStr) return '-';
+    // If already DD-MM-YYYY, just return
+    if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr;
+    // Try to parse ISO or other formats
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
   // Format date from yyyy-mm-dd to dd-mm-yyyy for submission
   const formatDateForSubmission = (dateString) => {
     if (!dateString) return '';
@@ -321,7 +334,7 @@ function App() {
                 <tr key={record.id} className={selectedRecordId === record.id ? 'selected-record' : ''}>
                   <td>{record.company}</td>
                   <td>{record.name || '-'}</td>
-                  <td>{record['due date']}</td>
+                  <td>{formatDisplayDate(record['due date'])}</td>
                   <td>{record['last premium']}</td>
                   <td>
                   <div className="action-buttons">
