@@ -68,10 +68,10 @@ function App() {
     setSearchTerm('');
     
     // Update company to the first option in the new tab's company list
-    setFormData(prev => ({
-      ...prev,
-      company: companyOptions[tab][0]
-    }));
+    // setFormData(prev => ({
+    //   ...prev,
+    //   company: companyOptions[tab][0]
+    // }));
   };
 
   const handleChange = (e) => {
@@ -191,6 +191,9 @@ function App() {
           required
           className="form-control"
         >
+          <option value="" disabled>
+            -- Select Company --
+          </option>
           {companyOptions[activeTab].map((company) => (
             <option key={company} value={company}>
               {company}
