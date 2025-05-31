@@ -27,8 +27,10 @@ function App() {
   const [selectedRecordId, setSelectedRecordId] = useState(null);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState(null);
+  const [monthFilter, setMonthFilter] = useState('');
 
   // Get the API URL from .env file
   const API_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
@@ -293,18 +295,61 @@ function App() {
 
   const renderRecordsList = () => {
     if (isLoadingRecords) {
-      return <div className="loading-records">Loading records...</div>;
+      return (
+        <div className="loading-records" aria-live="polite">
+          <span className="spinner" aria-label="Loading"></span> Loading records...
+        </div>
+      );
     }
 
     if (records.length === 0) {
-      return <div className="no-records">No records found for {activeTab} insurance.</div>;
+      return (
+        <div className="no-records" aria-live="polite" style={{ textAlign: 'center', color: '#888', margin: '40px 0' }}>
+          <div style={{ fontSize: '3rem' }}>📄</div>
+          <div>No records found for {activeTab} insurance.</div>
+        </div>
+      );
     }
 
-    const filteredRecords = searchTerm.trim() === '' 
-      ? records 
-      : records.filter(record => 
-          record.name && record.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+    const filteredRecords = records.filter(record => {
+      const matchesSearch = debouncedSearchTerm.trim() === '' || (
+        record.name && record.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      );
+      if (!monthFilter) return matchesSearch;
+
+      let recordMonth = '';
+      if (record['due date']) {
+        // Handle both DD-MM-YYYY and ISO formats
+        if (/^\d{2}-\d{2}-\d{4}$/.test(record['due date'])) {
+          const [, month] = record['due date'].split('-');
+          recordMonth = month;
+        } else {
+          const d = new Date(record['due date']);
+          if (!isNaN(d)) {
+            recordMonth = String(d.getMonth() + 1).padStart(2, '0');
+          }
+        }
+      }
+      return matchesSearch && (!monthFilter || recordMonth === monthFilter);
+    })
+    .sort((a, b) => {
+      // Helper to extract MMDD as a number for sorting
+      const getMonthDay = (dateStr) => {
+        if (!dateStr) return 0;
+        let month = '01', day = '01';
+        if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+          [day, month] = dateStr.split('-');
+        } else {
+          const d = new Date(dateStr);
+          if (!isNaN(d)) {
+            day = String(d.getDate()).padStart(2, '0');
+            month = String(d.getMonth() + 1).padStart(2, '0');
+          }
+        }
+        return parseInt(month + day, 10); // e.g., "0703" -> 703
+      };
+      return getMonthDay(a['due date']) - getMonthDay(b['due date']);
+    });
 
     return (
       <div className="records-list">
@@ -317,6 +362,23 @@ function App() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
+          <select
+            value={monthFilter}
+            onChange={e => setMonthFilter(e.target.value)}
+            className="month-filter-input"
+            style={{ marginLeft: '16px' }}
+          >
+            <option value="">All Months</option>
+            {Array.from({ length: 12 }, (_, i) => {
+              const value = String(i + 1).padStart(2, '0');
+              const label = new Date(0, i).toLocaleString('default', { month: 'long' });
+              return (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              );
+            })}
+          </select>
         </div>
         <div className="records-table-container">
           <table className="records-table">
@@ -425,6 +487,16 @@ function App() {
     setShowDeleteConfirm(false);
     setRecordToDelete(null);
   };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 400); // 400ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   return (
     <div className="app-container">

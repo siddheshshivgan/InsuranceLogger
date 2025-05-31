@@ -283,6 +283,24 @@
     }
   }
 
+  @media (max-width: 700px) {
+    .records-table-container {
+      overflow-x: auto;
+    }
+    .records-table th, .records-table td {
+      padding: 8px 4px;
+      font-size: 0.95rem;
+    }
+    .search-container {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pill-container {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  }
+
   .error-message {
     background-color: #ffebee;
     color: #c62828;
@@ -378,10 +396,13 @@
 
   .search-container {
     margin-bottom: 15px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
   }
   
   .search-input {
-    width: 100%;
+    flex: 1;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -467,4 +488,38 @@
   
   .confirm-delete-button:hover {
     background-color: #cc0000;
+  }
+
+  .month-filter-input {
+    padding: 8px 32px 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff url("data:image/svg+xml,%3Csvg width='16' height='16' fill='gray' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E") no-repeat right 10px center/18px 18px;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border 0.2s;
+    margin-left: 16px;
+  }
+
+  .month-filter-input:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+    background-color: #f0f7ff;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #1976d2;
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
