@@ -31,6 +31,7 @@ function App() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState(null);
   const [monthFilter, setMonthFilter] = useState('');
+  const [companyFilter, setCompanyFilter] = useState('');
 
   // Get the API URL from .env file
   const API_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
@@ -315,22 +316,32 @@ function App() {
       const matchesSearch = debouncedSearchTerm.trim() === '' || (
         record.name && record.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
       );
-      if (!monthFilter) return matchesSearch;
+      let matchesMonth = true;
+      let matchesCompany = true;
 
-      let recordMonth = '';
-      if (record['due date']) {
-        // Handle both DD-MM-YYYY and ISO formats
-        if (/^\d{2}-\d{2}-\d{4}$/.test(record['due date'])) {
-          const [, month] = record['due date'].split('-');
-          recordMonth = month;
-        } else {
-          const d = new Date(record['due date']);
-          if (!isNaN(d)) {
-            recordMonth = String(d.getMonth() + 1).padStart(2, '0');
+      // Month filter logic
+      if (monthFilter) {
+        let recordMonth = '';
+        if (record['due date']) {
+          if (/^\d{2}-\d{2}-\d{4}$/.test(record['due date'])) {
+            const [, month] = record['due date'].split('-');
+            recordMonth = month;
+          } else {
+            const d = new Date(record['due date']);
+            if (!isNaN(d)) {
+              recordMonth = String(d.getMonth() + 1).padStart(2, '0');
+            }
           }
         }
+        matchesMonth = recordMonth === monthFilter;
       }
-      return matchesSearch && (!monthFilter || recordMonth === monthFilter);
+
+      // Company filter logic
+      if (companyFilter) {
+        matchesCompany = record.company === companyFilter;
+      }
+
+      return matchesSearch && matchesMonth && matchesCompany;
     })
     .sort((a, b) => {
       // Helper to extract MMDD as a number for sorting
@@ -362,23 +373,65 @@ function App() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
-          <select
-            value={monthFilter}
-            onChange={e => setMonthFilter(e.target.value)}
-            className="month-filter-input"
-            style={{ marginLeft: '16px' }}
-          >
-            <option value="">All Months</option>
-            {Array.from({ length: 12 }, (_, i) => {
-              const value = String(i + 1).padStart(2, '0');
-              const label = new Date(0, i).toLocaleString('default', { month: 'long' });
-              return (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              );
-            })}
-          </select>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <select
+              value={monthFilter}
+              onChange={e => setMonthFilter(e.target.value)}
+              className="month-filter-input"
+              style={{ paddingRight: 36 }} // extra space for the arrow
+            >
+              <option value="">All Months</option>
+              {Array.from({ length: 12 }, (_, i) => {
+                const value = String(i + 1).padStart(2, '0');
+                const label = new Date(0, i).toLocaleString('default', { month: 'long' });
+                return (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                );
+              })}
+            </select>
+            <span
+              style={{
+                position: 'absolute',
+                right: 14,
+                top: '50%',
+                pointerEvents: 'none',
+                transform: 'translateY(-50%)'
+              }}
+            >
+              <svg width="18" height="18" fill="gray" viewBox="0 0 16 16">
+                <path d="M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </div>
+          {/* Company Filter Dropdown */}
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <select
+              value={companyFilter}
+              onChange={e => setCompanyFilter(e.target.value)}
+              className="company-filter-input"
+              style={{ paddingRight: 36 }}
+            >
+              <option value="">All Companies</option>
+              {companyOptions[activeTab].map(company => (
+                <option key={company} value={company}>{company}</option>
+              ))}
+            </select>
+            <span
+              style={{
+                position: 'absolute',
+                right: 14,
+                top: '50%',
+                pointerEvents: 'none',
+                transform: 'translateY(-50%)'
+              }}
+            >
+              <svg width="18" height="18" fill="gray" viewBox="0 0 16 16">
+                <path d="M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </div>
         </div>
         <div className="records-table-container">
           <table className="records-table">
