@@ -121,12 +121,15 @@ function App() {
     setFormData({
       company: record.company,
       name: record.name || '',
-      dueDate: record.dueDate,
-      lastPremium: record.lastPremium
+      dueDate: /^\d{2}-\d{2}-\d{4}$/.test(record["due date"])
+        ? record["due date"].split('-').reverse().join('-')
+        : record["due date"] ? new Date(record["due date"]).toISOString().slice(0,10) : '',
+      lastPremium: record["last premium"]
     });
     setSelectedRecordId(record.id);
     setMode('update');
     setErrorMessage('');
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // <-- Add this line
   };
 
   const handleSubmit = async (e) => {
