@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/InsuranceLogger/static/css/main.d75f1e02.css",
-    "main.js": "/InsuranceLogger/static/js/main.38a96b9d.js",
+    "main.css": "/InsuranceLogger/static/css/main.7dc35ea2.css",
+    "main.js": "/InsuranceLogger/static/js/main.4c3cb6d3.js",
     "static/media/logo.png": "/InsuranceLogger/static/media/logo.06560697f54c8e09e34a.png",
     "index.html": "/InsuranceLogger/index.html",
-    "main.d75f1e02.css.map": "/InsuranceLogger/static/css/main.d75f1e02.css.map",
-    "main.38a96b9d.js.map": "/InsuranceLogger/static/js/main.38a96b9d.js.map"
+    "main.7dc35ea2.css.map": "/InsuranceLogger/static/css/main.7dc35ea2.css.map",
+    "main.4c3cb6d3.js.map": "/InsuranceLogger/static/js/main.4c3cb6d3.js.map"
   },
   "entrypoints": [
-    "static/css/main.d75f1e02.css",
-    "static/js/main.38a96b9d.js"
+    "static/css/main.7dc35ea2.css",
+    "static/js/main.4c3cb6d3.js"
   ]
 }
