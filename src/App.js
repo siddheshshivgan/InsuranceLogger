@@ -116,7 +116,7 @@ function App() {
     setMode('add');
     setSelectedRecordId(null);
   };
-
+  console.log("Current formData:"); // Debugging line
   const handleRecordSelect = (record) => {
     setFormData({
       company: record.company,
