@@ -89,13 +89,20 @@ function App() {
     if (!dateStr) return '-';
     // If already DD-MM-YYYY, just return
     if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr;
-    // Try to parse ISO or other formats
-    const d = new Date(dateStr);
-    if (isNaN(d)) return dateStr;
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
+
+    // If ISO string (e.g., "2004-12-08T18:30:00.000Z")
+    // Google Sheets stores in UTC, which shifts IST dates back by 5h30m
+    // So we extract YYYY-DD-MM directly and fix month by adding 1
+    const isoMatch = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateStr);
+    if (isoMatch) {
+      const year = isoMatch[1];
+      const day = isoMatch[2];         // this is actually the correct month in disguise
+      const monthIndex = parseInt(isoMatch[3], 10);  // this is day - 1 due to UTC shift
+      const month = String(monthIndex + 1).padStart(2, '0');  // fix: add 1
+      return `${day}-${month}-${year}`;
+    }
+    
+    return dateStr;
   }
 
   // Format date from yyyy-mm-dd to dd-mm-yyyy for submission
